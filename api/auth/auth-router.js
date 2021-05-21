@@ -3,7 +3,7 @@ const {
   validateAuth,
   checkUsernameExists,
 } = require("../middleware/auth-middleware");
-const Users = require("../../data/dbConfig");
+const Users = require("./users-model");
 
 const bcrypt = require("bcrypt");
 const { BCRYPT_ROUNDS: rounds } = require("../../env-variables");
@@ -15,9 +15,9 @@ router.post(
   (req, res, next) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, rounds);
-
     user.password = hash;
-    Users.add(user)
+
+    Users.insert(user)
       .then((newUser) => {
         res.status(201).json(newUser);
       })
