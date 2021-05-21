@@ -2,8 +2,6 @@ const Users = require("./users-model");
 const db = require("../../data/dbConfig");
 
 const user1 = { username: "Captain Kuro", password: "foobar" };
-const user2 = { ...user1, username: "Captain Django" };
-const user1Copy = { ...user1 };
 
 beforeAll(async () => {
   await db.migrate.rollback();

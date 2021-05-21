@@ -1,12 +1,28 @@
 const router = require("express").Router();
-const { validateAuth } = require("../middleware/validate");
 const {
-  checkIfUsernameExists,
-} = require("../middleware/checkIfUsernameExists");
+  validateAuth,
+  checkUsernameExists,
+} = require("../middleware/auth-middleware");
+const Users = require("../../data/dbConfig");
 
-router.post("/register", checkIfUsernameExists, validateAuth, (req, res) => {
-  res.end("implement register, please!");
-  /*
+const bcrypt = require("bcrypt");
+const { BCRYPT_ROUNDS: rounds } = require("../../env-variables");
+
+router.post(
+  "/register",
+  checkUsernameExists,
+  validateAuth,
+  (req, res, next) => {
+    let user = req.body;
+    const hash = bcrypt.hashSync(user.password, rounds);
+
+    user.password = hash;
+    Users.add(user)
+      .then((newUser) => {
+        res.status(201).json(newUser);
+      })
+      .catch(next);
+    /*
       {
         "username": "Captain Marvel", // must not exist already in the `users` table
         "password": "foobar"          // needs to be hashed before it's saved
@@ -26,7 +42,8 @@ router.post("/register", checkIfUsernameExists, validateAuth, (req, res) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
-});
+  }
+);
 
 router.post("/login", (req, res) => {
   res.end("implement login, please!");
