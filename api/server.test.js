@@ -4,7 +4,9 @@ const server = require("./server");
 
 const user1 = { username: "Captain Kuro", password: "foobar" };
 const user2 = { ...user1, username: "Captain Django" };
-const user1Copy = { ...user1 };
+
+const registerEp = "/api/auth/register";
+const loginEp = "/api/auth/login";
 
 beforeAll(async () => {
   await db.migrate.rollback();
@@ -22,7 +24,7 @@ describe("sanity", () => {
 }); //sanity
 
 describe("auth-router", () => {
-  const registerEp = "/api/auth/register";
+  //
   describe(`[POST] ${registerEp}`, () => {
     describe("Happy path", () => {
       it("should respond with 201", async () => {
@@ -51,15 +53,15 @@ describe("auth-router", () => {
       describe("invalid username", () => {
         describe("duplicate username", () => {
           beforeEach(
-            async () => await request(server).post(registerEp).send(user1Copy)
+            async () => await request(server).post(registerEp).send(user1)
           );
           it("should respond with 400 on duplicate username", async () => {
-            const res = await request(server).post(registerEp).send(user1Copy);
+            const res = await request(server).post(registerEp).send(user1);
             expect(res.status).toBe(400);
           });
 
           it("should respond with proper error on duplicate username", async () => {
-            const res = await request(server).post(registerEp).send(user1Copy);
+            const res = await request(server).post(registerEp).send(user1);
             expect(res.body.message).toEqual("username taken");
           });
         }); //duplicate username
@@ -122,4 +124,27 @@ describe("auth-router", () => {
       //       }); //invalid password
     }); //Sad path STATUS 400
   }); //[POST] /registration
+
+  describe(`[POST] ${loginEp}`, () => {
+    describe("Happy path", () => {
+      beforeEach(async () => {
+        await request(server).post(registerEp).send(user1);
+      });
+
+      it("should respond with 200", async () => {
+        const res = await request(server).post(loginEp).send(user1);
+        expect(res.status).toBe(200);
+      });
+
+      it("should respond with message", async () => {
+        const res = await request(server).post(loginEp).send(user1);
+        expect(res.body.message).toBe(`welcome, ${user1.username}`);
+      });
+
+      // it("should respond with token containing username and id", async () => {
+      //   const res = await request(server).post(loginEp).send(user1);
+      //   expect(res.body).toHaveProperty("token");
+      // });
+    }); //Happy path
+  }); //[POST] /login
 }); //auth-router
