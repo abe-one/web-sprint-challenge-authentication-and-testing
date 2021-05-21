@@ -32,12 +32,16 @@ describe("auth-router", () => {
 
       it("should respond with new user", async () => {
         const res = await request(server).post(registerEp).send(user1);
-        expect(res.body).toMatchObject(user1);
+        expect(res.body.username).toBe(user1.username);
       });
 
       it("should respond with user id", async () => {
         const res = await request(server).post(registerEp).send(user1);
         expect(res.body).toHaveProperty("id");
+      });
+      it("should respond with hashed password", async () => {
+        const res = await request(server).post(registerEp).send(user1);
+        expect(res.body.password).not.toEqual(user1.password);
       });
     }); //Happy path
 
