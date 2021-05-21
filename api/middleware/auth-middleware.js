@@ -13,7 +13,7 @@ exports.checkUsernameExists = (req, _res, next) => {
   Users.getBy({ username: req.body.username })
     .then((user) => {
       if (user.length !== 0) {
-        req.foundUser = req.body;
+        req.foundUser = user[0];
         next();
       } else {
         next({ status: 400, message: "invalid credentials" });
@@ -26,8 +26,4 @@ exports.validateBody = (req, res, next) => {
   !req.body.username || !req.body.password
     ? next({ status: 400, message: "username and password required" })
     : next();
-};
-
-exports.validateAuth = (req, res, next) => {
-  return next();
 };
