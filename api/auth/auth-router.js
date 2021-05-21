@@ -10,7 +10,7 @@ const bcrypt = require("bcrypt");
 const buildToken = require("./build-token");
 const { BCRYPT_ROUNDS: rounds } = require("../../env-variables");
 
-router.post("/register", checkUsernameFree, validateBody, (req, res, next) => {
+router.post("/register", validateBody, checkUsernameFree, (req, res, next) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
