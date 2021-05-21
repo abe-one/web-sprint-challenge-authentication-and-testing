@@ -1,15 +1,12 @@
 const Users = require("../auth/users-model");
 
-exports.checkUsernameExists = (req, res, next) => {
+exports.checkUsernameFree = (req, res, next) => {
   const username = req.body.username;
   Users.getBy({ username: username })
     .then((user) => {
-      if (user.length === 0) {
-        next();
-      } else {
-        req.user = user;
-        next();
-      }
+      user.length === 0
+        ? next()
+        : next({ status: 400, message: "username taken" });
     })
     .catch(next);
 };
