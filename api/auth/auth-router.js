@@ -1,13 +1,9 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const { validateAuth } = require("../middleware/validate");
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+router.post("/register", validateAuth, (req, res) => {
+  res.end("implement register, please!");
   /*
-    IMPLEMENT
-    You are welcome to build additional middlewares to help with the endpoint's functionality.
-    DO NOT EXCEED 2^8 ROUNDS OF HASHING!
-
-    1- In order to register a new account the client must provide `username` and `password`:
       {
         "username": "Captain Marvel", // must not exist already in the `users` table
         "password": "foobar"          // needs to be hashed before it's saved
@@ -29,8 +25,8 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post("/login", (req, res) => {
+  res.end("implement login, please!");
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
