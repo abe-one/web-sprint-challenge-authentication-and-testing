@@ -30,15 +30,17 @@ describe("Users-model", () => {
   describe("insert()", () => {
     it("should resolve to new user", async () => {
       const resolvedUser = await Users.insert(user1);
-      expect(resolvedUser[0]).toMatchObject(user1);
+      expect(resolvedUser).toMatchObject(user1);
     });
     it("should resolve to new user with id", async () => {
       const resolvedUser = await Users.insert(user1);
-      expect(resolvedUser[0]).toHaveProperty("id");
+      expect(resolvedUser).toHaveProperty("id");
     });
     it("should add new user to db", async () => {
       const resolvedUser = await Users.insert(user1);
-      const insertedUser = await db("users").where({ id: resolvedUser[0].id });
+      const insertedUser = await db("users")
+        .where({ id: resolvedUser.id })
+        .first();
       expect(insertedUser).toEqual(resolvedUser);
     });
   }); //insert()
