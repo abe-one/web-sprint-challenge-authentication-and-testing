@@ -2,13 +2,14 @@ const router = require("express").Router();
 const {
   validateAuth,
   checkUsernameFree,
+  validateBody,
 } = require("../middleware/auth-middleware");
 const Users = require("./users-model");
 
 const bcrypt = require("bcrypt");
 const { BCRYPT_ROUNDS: rounds } = require("../../env-variables");
 
-router.post("/register", checkUsernameFree, validateAuth, (req, res, next) => {
+router.post("/register", checkUsernameFree, validateBody, (req, res, next) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
@@ -18,14 +19,6 @@ router.post("/register", checkUsernameFree, validateAuth, (req, res, next) => {
       res.status(201).json(newUser);
     })
     .catch(next);
-  /*
-
-    3- On FAILED registration due to `username` or `password` missing from the request body,
-      the response body should include a string exactly as follows: "username and password required".
-
-    4- On FAILED registration due to the `username` being taken,
-      the response body should include a string exactly as follows: "username taken".
-  */
 });
 
 router.post("/login", (req, res) => {
