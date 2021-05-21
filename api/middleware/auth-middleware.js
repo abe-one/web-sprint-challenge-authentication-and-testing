@@ -2,6 +2,7 @@ const Users = require("../auth/users-model");
 
 exports.checkUsernameFree = (req, res, next) => {
   Users.getBy({ username: req.body.username })
+
     .then((user) => {
       user.length === 0
         ? next()
@@ -11,6 +12,7 @@ exports.checkUsernameFree = (req, res, next) => {
 };
 exports.checkUsernameExists = (req, _res, next) => {
   Users.getBy({ username: req.body.username })
+
     .then((user) => {
       if (user.length !== 0) {
         req.foundUser = user[0];

@@ -14,6 +14,7 @@ afterAll(async () => await db.destroy());
 describe("Users-model", () => {
   describe("getBy()", () => {
     const username = user1.username;
+
     beforeEach(async () => await db("users").insert(user1));
 
     it("should resolve to user", async () => {
@@ -41,6 +42,7 @@ describe("Users-model", () => {
       const insertedUser = await db("users")
         .where({ id: resolvedUser.id })
         .first();
+
       expect(insertedUser).toEqual(resolvedUser);
     });
   }); //insert()

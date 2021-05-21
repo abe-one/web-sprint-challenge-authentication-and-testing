@@ -27,6 +27,7 @@ describe("sanity", () => {
 describe("auth-router", () => {
   //
   describe(`[POST] ${registerEp}`, () => {
+    //
     describe("Happy path", () => {
       it("should respond with 201", async () => {
         const res = await request(server).post(registerEp).send(user1);
@@ -42,6 +43,7 @@ describe("auth-router", () => {
         const res = await request(server).post(registerEp).send(user1);
         expect(res.body).toHaveProperty("id");
       });
+
       it("should respond with hashed password", async () => {
         const res = await request(server).post(registerEp).send(user1);
         expect(res.body.password).not.toEqual(user1.password);
@@ -56,6 +58,7 @@ describe("auth-router", () => {
           beforeEach(
             async () => await request(server).post(registerEp).send(user1)
           );
+
           it("should respond with 400 on duplicate username", async () => {
             const res = await request(server).post(registerEp).send(user1);
             expect(res.status).toBe(400);
@@ -129,6 +132,7 @@ describe("auth-router", () => {
   }); //[POST] /registration
 
   describe(`[POST] ${loginEp}`, () => {
+    //
     describe("Happy path", () => {
       beforeEach(async () => {
         await request(server).post(registerEp).send(user1);
