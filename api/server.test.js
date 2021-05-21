@@ -3,7 +3,6 @@ const request = require("supertest");
 const server = require("./server");
 
 const user1 = { username: "Captain Kuro", password: "foobar" };
-const user2 = { ...user1, username: "Captain Django" };
 
 const registerEp = "/api/auth/register";
 const loginEp = "/api/auth/login";
@@ -51,8 +50,6 @@ describe("auth-router", () => {
     }); //Happy path
 
     describe("Sad path: Bad inputs", () => {
-      const { username, userNoName } = user1;
-
       describe("invalid username", () => {
         describe("duplicate username", () => {
           beforeEach(
@@ -71,63 +68,7 @@ describe("auth-router", () => {
             expect(res.body.message).toEqual("username taken");
           });
         }); //duplicate username
-
-        // it.todo(
-        //   "should respond with 400 on missing username"
-        //   //, async ()=>{
-
-        //   //}
-        // );
-        // it.todo(
-        //   "should respond with proper error on missing username"
-        //   //, async ()=>{
-
-        //   //}
-        // );
-
-        // it.todo(
-        //   "should respond with 400 on invalid username"
-        //   //, async ()=>{
-
-        //   //}
-        // );
-
-        // it.todo(
-        //   "should respond with proper error on invalid username"
-        //   //, async ()=>{
-
-        //}
-        // );
       }); //invalid username
-
-      //       describe("invalid password", () => {
-      //         it.todo(
-      //           "should respond with 400 on missing password"
-      //           //, async ()=>{
-
-      //           //}
-      //         );
-      //         it.todo(
-      //           "should respond with proper error on missing password"
-      //           //, async ()=>{
-
-      //           //}
-      //         );
-
-      //         it.todo(
-      //           "should respond with 400 on invalid password"
-      //           //, async ()=>{
-
-      //           //}
-      //         );
-
-      //         it.todo(
-      //           "should respond with proper on invalid password"
-      //           //, async ()=>{
-
-      //           //}
-      //         );
-      //       }); //invalid password
     }); //Sad path STATUS 400
   }); //[POST] /registration
 
@@ -147,11 +88,6 @@ describe("auth-router", () => {
         const res = await request(server).post(loginEp).send(user1);
         expect(res.body.message).toBe(`welcome, ${user1.username}`);
       });
-
-      // it("should respond with token containing username and id", async () => {
-      //   const res = await request(server).post(loginEp).send(user1);
-      //   expect(res.body).toHaveProperty("token");
-      // });
     }); //Happy path
   }); //[POST] /login
 }); //auth-router
