@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const { validateAuth } = require("../middleware/validate");
+const {
+  checkIfUsernameExists,
+} = require("../middleware/checkIfUsernameExists");
 
-router.post("/register", validateAuth, (req, res) => {
+router.post("/register", checkIfUsernameExists, validateAuth, (req, res) => {
   res.end("implement register, please!");
   /*
       {
