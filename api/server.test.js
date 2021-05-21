@@ -49,46 +49,46 @@ describe("auth-router", () => {
       const { username, userNoName } = user1;
 
       describe("invalid username", () => {
-        // it("should respond with 400 on duplicate username", async () => {
-        //   await request(server).post(registerEp).send(user1Copy);
-        //   const res = await request(server).post(registerEp).send(user1Copy);
-        //   expect(res.status).toBe(400);
-        // });
+        it("should respond with 400 on duplicate username", async () => {
+          await request(server).post(registerEp).send(user1Copy);
+          const res = await request(server).post(registerEp).send(user1Copy);
+          expect(res.status).toBe(400);
+        });
 
-        it.todo(
-          "should respond with proper error on duplicate username"
-          // , async () => {
+        // it.todo(
+        //   "should respond with proper error on duplicate username"
+        //   // , async () => {
 
-          // }
-        );
-        //duplicate username
+        //   // }
+        // );
+        // //duplicate username
 
-        it.todo(
-          "should respond with 400 on missing username"
-          //, async ()=>{
+        // it.todo(
+        //   "should respond with 400 on missing username"
+        //   //, async ()=>{
 
-          //}
-        );
-        it.todo(
-          "should respond with proper error on missing username"
-          //, async ()=>{
+        //   //}
+        // );
+        // it.todo(
+        //   "should respond with proper error on missing username"
+        //   //, async ()=>{
 
-          //}
-        );
+        //   //}
+        // );
 
-        it.todo(
-          "should respond with 400 on invalid username"
-          //, async ()=>{
+        // it.todo(
+        //   "should respond with 400 on invalid username"
+        //   //, async ()=>{
 
-          //}
-        );
+        //   //}
+        // );
 
-        it.todo(
-          "should respond with proper error on invalid username"
-          //, async ()=>{
+        // it.todo(
+        //   "should respond with proper error on invalid username"
+        //   //, async ()=>{
 
-          //}
-        );
+        //}
+        // );
       }); //invalid username
 
       //       describe("invalid password", () => {
