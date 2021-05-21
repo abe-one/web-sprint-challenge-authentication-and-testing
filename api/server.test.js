@@ -7,6 +7,7 @@ const user2 = { ...user1, username: "Captain Django" };
 
 const registerEp = "/api/auth/register";
 const loginEp = "/api/auth/login";
+const jokesEp = "/api/jokes";
 
 beforeAll(async () => {
   await db.migrate.rollback();
@@ -61,7 +62,9 @@ describe("auth-router", () => {
           });
 
           it("should respond with proper error on duplicate username", async () => {
-            const res = await request(server).post(registerEp).send(user1);
+            const res = await await request(server)
+              .post(registerEp)
+              .send(user1);
             expect(res.body.message).toEqual("username taken");
           });
         }); //duplicate username
@@ -148,3 +151,30 @@ describe("auth-router", () => {
     }); //Happy path
   }); //[POST] /login
 }); //auth-router
+
+describe("jokes-router", () => {
+  let token;
+  beforeAll(async () => await request(server).post(registerEp).send(user1));
+  beforeAll(
+    async () => (token = await request(server).post(loginEp).send(user1))
+  );
+  beforeAll(() => (token = token.body.token));
+
+  describe("[GET] /", () => {
+    it("should reject missing token", async () => {
+      const rejection = await request(server).get(jokesEp);
+      expect(rejection.body).toMatchObject({
+        message: "token required",
+      });
+    });
+
+    it("should reject missing token", async () => {
+      const rejection = await request(server)
+        .get(jokesEp)
+        .set("authorization", "token");
+      expect(rejection.body).toEqual({
+        message: "invalid token",
+      });
+    });
+  }); //[GET] /
+}); //jokes-router
