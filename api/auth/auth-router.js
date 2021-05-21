@@ -13,6 +13,9 @@ router.post(
   checkUsernameExists,
   validateAuth,
   (req, res, next) => {
+    if (req.user) {
+      return next({ status: 400, message: "username taken" });
+    }
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, rounds);
     user.password = hash;
@@ -23,18 +26,6 @@ router.post(
       })
       .catch(next);
     /*
-      {
-        "username": "Captain Marvel", // must not exist already in the `users` table
-        "password": "foobar"          // needs to be hashed before it's saved
-      }
-
-    2- On SUCCESSFUL registration,
-      the response body should have `id`, `username` and `password`:
-      {
-        "id": 1,
-        "username": "Captain Marvel",
-        "password": "2a$08$jG.wIGR2S4hxuyWNcBf9MuoC4y0dNy7qC/LbmtuFBSdIhWks2LhpG"
-      }
 
     3- On FAILED registration due to `username` or `password` missing from the request body,
       the response body should include a string exactly as follows: "username and password required".

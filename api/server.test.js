@@ -49,19 +49,20 @@ describe("auth-router", () => {
       const { username, userNoName } = user1;
 
       describe("invalid username", () => {
-        it("should respond with 400 on duplicate username", async () => {
-          await request(server).post(registerEp).send(user1Copy);
-          const res = await request(server).post(registerEp).send(user1Copy);
-          expect(res.status).toBe(400);
-        });
+        describe("duplicate username", () => {
+          beforeEach(
+            async () => await request(server).post(registerEp).send(user1Copy)
+          );
+          it("should respond with 400 on duplicate username", async () => {
+            const res = await request(server).post(registerEp).send(user1Copy);
+            expect(res.status).toBe(400);
+          });
 
-        // it.todo(
-        //   "should respond with proper error on duplicate username"
-        //   // , async () => {
-
-        //   // }
-        // );
-        // //duplicate username
+          it("should respond with proper error on duplicate username", async () => {
+            const res = await request(server).post(registerEp).send(user1Copy);
+            expect(res.body.message).toEqual("username taken");
+          });
+        }); //duplicate username
 
         // it.todo(
         //   "should respond with 400 on missing username"
